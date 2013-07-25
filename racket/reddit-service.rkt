@@ -57,7 +57,7 @@
 
 
 ; Handle connections
-(define CONNECTION false)
+(define CONNECTION true)
 (define (disconnect-reddit-service)
 	(set! CONNECTION false))
 (define (connect-reddit-service)
@@ -91,7 +91,10 @@
 
 ; Define the services, and their helpers
 (define (get-posts subreddit sort-mode)
-	(map json->post (hash-ref (hash-ref (get-posts/json subreddit sort-mode) 'data) 'children)))
+  (local [(define DATA (get-posts/json subreddit sort-mode))]
+    (if (or (number? DATA) (and (hash? DATA) (hash-has-key? DATA 'error)))
+             empty
+             (map json->post (hash-ref (hash-ref (get-posts/json subreddit sort-mode) 'data) 'children)))))
 
 (define (get-posts/json subreddit sort-mode)
 	(string->jsexpr (get-posts/string subreddit sort-mode)))
@@ -101,14 +104,19 @@
 	 	(list) 
 	 	(list (cons 'sort_mode sort-mode) (cons 'subreddit subreddit))))
 
-(define (get-comments subreddit id sort-mode)
-  (map json->comment 
-         (drop-right (hash-ref (hash-ref (second (get-comments/json subreddit id sort-mode)) 'data) 'children) 1)))
+(define (get-comments id sort-mode)
+  (local [(define DATA (get-comments/json id sort-mode))]
+    (if (and (hash? DATA) (hash-has-key? DATA 'error))
+        empty
+        (map json->comment 
+         (drop-right (hash-ref (hash-ref (second DATA) 'data) 'children) 1)))
+    ))
 
-(define (get-comments/json subreddit id sort-mode)
-  (string->jsexpr (get-comments/string subreddit id sort-mode)))
+(define (get-comments/json id sort-mode)
+  (string->jsexpr (get-comments/string id sort-mode)))
 
-(define (get-comments/string subreddit id sort-mode)
-	(get->json (string-append "http://www.reddit.com/r/" subreddit "/comments/" id "/" sort-mode ".json") 
+(define (get-comments/string id sort-mode)
+	(get->json (string-append "http://www.reddit.com/r/all/comments/" id "/" sort-mode ".json") 
 	 	(list) 
-	 	(list (cons 'sort_mode sort-mode) (cons 'id id) (cons 'subreddit subreddit))))
+	 	(list (cons 'id id) (cons 'sort_mode sort-mode))))
+

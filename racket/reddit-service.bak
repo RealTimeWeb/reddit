@@ -28,28 +28,32 @@
 (define-struct comment (ups downs created subreddit id author body body-html replies))
 
 (define (json->post jdata)
-	(make-post (string->number (hash-ref (hash-ref jdata 'data) 'ups))
-			(string->number (hash-ref (hash-ref jdata 'data) 'downs))
-			(string->number (hash-ref (hash-ref jdata 'data) 'created))
+	(make-post (hash-ref (hash-ref jdata 'data) 'ups)
+			(hash-ref (hash-ref jdata 'data) 'downs)
+			(hash-ref (hash-ref jdata 'data) 'created)
 			(hash-ref (hash-ref jdata 'data) 'subreddit)
 			(hash-ref (hash-ref jdata 'data) 'id)
 			(hash-ref (hash-ref jdata 'data) 'title)
 			(hash-ref (hash-ref jdata 'data) 'author)
-			(string->boolean (hash-ref (hash-ref jdata 'data) 'is-self))
-			(string->boolean (hash-ref (hash-ref jdata 'data) 'over-18))
-			(hash-ref (hash-ref jdata 'data) 'selftext)
+			(hash-ref (hash-ref jdata 'data) 'is_self)
+			(hash-ref (hash-ref jdata 'data) 'over_18)
+                        (if (hash-ref (hash-ref jdata 'data) 'is_self)
+                            (hash-ref (hash-ref jdata 'data) 'selftext)
+                            (hash-ref (hash-ref jdata 'data) 'url))
 			(hash-ref (hash-ref jdata 'data) 'permalink)))
 
 (define (json->comment jdata)
-	(make-comment (string->number (hash-ref (hash-ref jdata 'data) 'ups))
-			(string->number (hash-ref (hash-ref jdata 'data) 'downs))
-			(string->number (hash-ref (hash-ref jdata 'data) 'created))
+	(make-comment (hash-ref (hash-ref jdata 'data) 'ups)
+			(hash-ref (hash-ref jdata 'data) 'downs)
+			(hash-ref (hash-ref jdata 'data) 'created)
 			(hash-ref (hash-ref jdata 'data) 'subreddit)
 			(hash-ref (hash-ref jdata 'data) 'id)
 			(hash-ref (hash-ref jdata 'data) 'author)
 			(hash-ref (hash-ref jdata 'data) 'body)
-			(hash-ref (hash-ref jdata 'data) 'body-html)
-			(map json->comment (hash-ref (hash-ref (hash-ref (hash-ref jdata 'data) 'replies) 'data) 'children))))
+			(hash-ref (hash-ref jdata 'data) 'body_html)
+                        (if (equal? "" (hash-ref (hash-ref jdata 'data) 'replies))
+                            empty
+			(map json->comment (drop-right (hash-ref (hash-ref (hash-ref (hash-ref jdata 'data) 'replies) 'data) 'children) 1)))))
 
 
 ; Handle connections
@@ -87,24 +91,24 @@
 
 ; Define the services, and their helpers
 (define (get-posts subreddit sort-mode)
-	(map json->post (get-posts/json subreddit sort-mode)))
+	(map json->post (hash-ref (hash-ref (get-posts/json subreddit sort-mode) 'data) 'children)))
 
 (define (get-posts/json subreddit sort-mode)
 	(string->jsexpr (get-posts/string subreddit sort-mode)))
 
 (define (get-posts/string subreddit sort-mode)
-	(get->json (string-append "http://www.reddit.com/r/<subreddit>/<sort_mode>.json") 
-	 	(list (cons 'sort_mode (json->sortmode sort-mode)) (cons 'subreddit subreddit)) 
-	 	(list (cons 'sort_mode (json->sortmode sort-mode)) (cons 'subreddit subreddit))))
+	(get->json (string-append "http://www.reddit.com/r/" subreddit "/" sort-mode ".json") 
+	 	(list) 
+	 	(list (cons 'sort_mode sort-mode) (cons 'subreddit subreddit))))
 
-(define (get-comments subreddit id sort-mode)
-	(map json->comment (get-comments/json subreddit id sort-mode)))
+(define (get-comments id sort-mode)
+  (map json->comment 
+         (drop-right (hash-ref (hash-ref (second (get-comments/json id sort-mode)) 'data) 'children) 1)))
 
-(define (get-comments/json subreddit id sort-mode)
-	(string->jsexpr (get-comments/string subreddit id sort-mode)))
+(define (get-comments/json id sort-mode)
+  (string->jsexpr (get-comments/string id sort-mode)))
 
 (define (get-comments/string subreddit id sort-mode)
-	(get->json (string-append "http://www.reddit.com/r/<subreddit>/comments/<id>/<sort_mode>.json") 
-	 	(list (cons 'sort_mode (json->sortmode sort-mode)) (cons 'id id) (cons 'subreddit subreddit)) 
-	 	(list (cons 'sort_mode (json->sortmode sort-mode)) (cons 'id id) (cons 'subreddit subreddit))))
-
+	(get->json (string-append "http://www.reddit.com/r/all/comments/" id "/" sort-mode ".json") 
+	 	(list) 
+	 	(list (cons 'id id) (cons 'sort_mode sort-mode))))
