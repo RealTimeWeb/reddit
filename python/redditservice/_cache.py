@@ -12,22 +12,22 @@ def _recursively_convert_unicode_to_str(input):
 
 CACHE = {}
 def unload():
-	"""
-	
-	:returns:
-	"""
-	CACHE= {}
+    """
+    Internal method that empties the local cache.
+    :returns: void
+    """
+    CACHE= {}
 def load():
-	"""
-	
-	:returns:
-	"""
-	CACHE = _recursively_convert_unicode_to_str(json.load(open(cache.json, r)))
+    """
+    Internal method that loads the local cache.
+    :returns: void
+    """
+    CACHE = _recursively_convert_unicode_to_str(json.load(open(cache.json, r)))
 def lookup(key):
-	"""
-	
-	:param key: _
-	:type key: _
-	:returns:
-	"""
-	return CACHE.get(key, "")
+    """
+    Internal method that looks up a key in the local cache.
+    :param key: Get the value based on the key from the cache.
+    :type key: string
+    :returns: void
+    """
+    return CACHE.get(key, "")

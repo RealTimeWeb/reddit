@@ -20,14 +20,14 @@
 <FONT color="green">017</FONT>    import realtimeweb.redditservice.json.JsonGetCommentsListener;<a name="line.17"></a>
 <FONT color="green">018</FONT>    <a name="line.18"></a>
 <FONT color="green">019</FONT>    /**<a name="line.19"></a>
-<FONT color="green">020</FONT>     * <a name="line.20"></a>
+<FONT color="green">020</FONT>     * Used to get data as classes.<a name="line.20"></a>
 <FONT color="green">021</FONT>     */<a name="line.21"></a>
 <FONT color="green">022</FONT>    public class RedditService implements AbstractRedditService {<a name="line.22"></a>
 <FONT color="green">023</FONT>            private static RedditService instance;<a name="line.23"></a>
 <FONT color="green">024</FONT>            private JsonRedditService jsonInstance;<a name="line.24"></a>
 <FONT color="green">025</FONT>            private Gson gson;<a name="line.25"></a>
 <FONT color="green">026</FONT>            /**<a name="line.26"></a>
-<FONT color="green">027</FONT>             * <a name="line.27"></a>
+<FONT color="green">027</FONT>             * **For internal use only!** Protected Constructor guards against instantiation.<a name="line.27"></a>
 <FONT color="green">028</FONT>            <a name="line.28"></a>
 <FONT color="green">029</FONT>             * @return <a name="line.29"></a>
 <FONT color="green">030</FONT>             */<a name="line.30"></a>
@@ -37,7 +37,7 @@
 <FONT color="green">034</FONT>            }<a name="line.34"></a>
 <FONT color="green">035</FONT>            <a name="line.35"></a>
 <FONT color="green">036</FONT>            /**<a name="line.36"></a>
-<FONT color="green">037</FONT>             * <a name="line.37"></a>
+<FONT color="green">037</FONT>             * Retrieves the singleton instance.<a name="line.37"></a>
 <FONT color="green">038</FONT>            <a name="line.38"></a>
 <FONT color="green">039</FONT>             * @return RedditService<a name="line.39"></a>
 <FONT color="green">040</FONT>             */<a name="line.40"></a>
@@ -54,7 +54,7 @@
 <FONT color="green">051</FONT>            }<a name="line.51"></a>
 <FONT color="green">052</FONT>            <a name="line.52"></a>
 <FONT color="green">053</FONT>            /**<a name="line.53"></a>
-<FONT color="green">054</FONT>             * <a name="line.54"></a>
+<FONT color="green">054</FONT>             * Establishes a connection to the online service. Requires an internet connection.<a name="line.54"></a>
 <FONT color="green">055</FONT>            <a name="line.55"></a>
 <FONT color="green">056</FONT>             */<a name="line.56"></a>
 <FONT color="green">057</FONT>            @Override<a name="line.57"></a>
@@ -63,7 +63,7 @@
 <FONT color="green">060</FONT>            }<a name="line.60"></a>
 <FONT color="green">061</FONT>            <a name="line.61"></a>
 <FONT color="green">062</FONT>            /**<a name="line.62"></a>
-<FONT color="green">063</FONT>             * <a name="line.63"></a>
+<FONT color="green">063</FONT>             * Establishes that Business Search data should be retrieved locally. This does not require an internet connection.&lt;br&gt;&lt;br&gt;If data is being retrieved locally, you must be sure that your parameters match locally stored data. Otherwise, you will get nothing in return.<a name="line.63"></a>
 <FONT color="green">064</FONT>            <a name="line.64"></a>
 <FONT color="green">065</FONT>             */<a name="line.65"></a>
 <FONT color="green">066</FONT>            @Override<a name="line.66"></a>
@@ -73,12 +73,12 @@
 <FONT color="green">070</FONT>            <a name="line.70"></a>
 <FONT color="green">071</FONT>            /**<a name="line.71"></a>
 <FONT color="green">072</FONT>             * Retrieves all the top posts<a name="line.72"></a>
-<FONT color="green">073</FONT>             * @param subreddit<a name="line.73"></a>
-<FONT color="green">074</FONT>             * @param sortMode<a name="line.74"></a>
+<FONT color="green">073</FONT>             * @param subreddit The subreddit that Posts will be returned from. Use "all" to return results from all subreddits.<a name="line.73"></a>
+<FONT color="green">074</FONT>             * @param sortMode The order that the Posts will be sorted by. Options are: "top" (ranked by upvotes minus downvotes), "best" (similar to top, except that it uses a more complicated algorithm to have good posts jump to the top and stay there, and bad comments to work their way down, see http://blog.reddit.com/2009/10/reddits-new-comment-sorting-system.html), "hot" (similar to "top", but weighted by time so that recent, popular posts are put near the top), "new" (posts will be sorted by creation time).<a name="line.74"></a>
 <FONT color="green">075</FONT>             * @return ArrayList&lt;Post&gt;<a name="line.75"></a>
 <FONT color="green">076</FONT>             */<a name="line.76"></a>
 <FONT color="green">077</FONT>            public ArrayList&lt;Post&gt; getPosts(String subreddit, String sortMode) throws Exception {<a name="line.77"></a>
-<FONT color="green">078</FONT>                    String data= jsonInstance.getPosts(subreddit,sortMode);<a name="line.78"></a>
+<FONT color="green">078</FONT>                    String data = jsonInstance.getPosts(subreddit,sortMode);<a name="line.78"></a>
 <FONT color="green">079</FONT>                    JsonParser parser = new JsonParser();<a name="line.79"></a>
 <FONT color="green">080</FONT>                    JsonArray allChildren = parser.parse(data).getAsJsonObject().get("data").getAsJsonObject().get("children").getAsJsonArray();<a name="line.80"></a>
 <FONT color="green">081</FONT>                    ArrayList&lt;Post&gt; result = new ArrayList&lt;Post&gt;();<a name="line.81"></a>
@@ -90,9 +90,9 @@
 <FONT color="green">087</FONT>            <a name="line.87"></a>
 <FONT color="green">088</FONT>            /**<a name="line.88"></a>
 <FONT color="green">089</FONT>             * Retrieves all the top posts<a name="line.89"></a>
-<FONT color="green">090</FONT>             * @param subreddit<a name="line.90"></a>
-<FONT color="green">091</FONT>             * @param sortMode<a name="line.91"></a>
-<FONT color="green">092</FONT>             * @param callback<a name="line.92"></a>
+<FONT color="green">090</FONT>             * @param subreddit The subreddit that Posts will be returned from. Use "all" to return results from all subreddits.<a name="line.90"></a>
+<FONT color="green">091</FONT>             * @param sortMode The order that the Posts will be sorted by. Options are: "top" (ranked by upvotes minus downvotes), "best" (similar to top, except that it uses a more complicated algorithm to have good posts jump to the top and stay there, and bad comments to work their way down, see http://blog.reddit.com/2009/10/reddits-new-comment-sorting-system.html), "hot" (similar to "top", but weighted by time so that recent, popular posts are put near the top), "new" (posts will be sorted by creation time).<a name="line.91"></a>
+<FONT color="green">092</FONT>             * @param callback The listener that will receive the data (or error).<a name="line.92"></a>
 <FONT color="green">093</FONT>             */<a name="line.93"></a>
 <FONT color="green">094</FONT>            public void getPosts(String subreddit, String sortMode, final GetPostsListener callback) {<a name="line.94"></a>
 <FONT color="green">095</FONT>                    <a name="line.95"></a>
@@ -108,7 +108,7 @@
 <FONT color="green">105</FONT>                            JsonArray allChildren = parser.parse(data).getAsJsonObject().get("data").getAsJsonObject().get("children").getAsJsonArray();<a name="line.105"></a>
 <FONT color="green">106</FONT>                            ArrayList&lt;Post&gt; result = new ArrayList&lt;Post&gt;();<a name="line.106"></a>
 <FONT color="green">107</FONT>                            for (int i = 0; i &lt; allChildren.size()-1; i += 1) {<a name="line.107"></a>
-<FONT color="green">108</FONT>                                result.set(i, new Post(allChildren.get(i).getAsJsonObject(), gson));<a name="line.108"></a>
+<FONT color="green">108</FONT>                                result.add(new Post(allChildren.get(i).getAsJsonObject(), gson));<a name="line.108"></a>
 <FONT color="green">109</FONT>                            }<a name="line.109"></a>
 <FONT color="green">110</FONT>                            callback.getPostsCompleted(result);<a name="line.110"></a>
 <FONT color="green">111</FONT>                        }<a name="line.111"></a>
@@ -118,52 +118,50 @@
 <FONT color="green">115</FONT>            <a name="line.115"></a>
 <FONT color="green">116</FONT>            /**<a name="line.116"></a>
 <FONT color="green">117</FONT>             * Retrieves comments for a post<a name="line.117"></a>
-<FONT color="green">118</FONT>             * @param subreddit<a name="line.118"></a>
-<FONT color="green">119</FONT>             * @param id<a name="line.119"></a>
-<FONT color="green">120</FONT>             * @param sortMode<a name="line.120"></a>
-<FONT color="green">121</FONT>             * @return ArrayList&lt;Comment&gt;<a name="line.121"></a>
-<FONT color="green">122</FONT>             */<a name="line.122"></a>
-<FONT color="green">123</FONT>            public ArrayList&lt;Comment&gt; getComments(String subreddit, String id, String sortMode) throws Exception {<a name="line.123"></a>
-<FONT color="green">124</FONT>                    String data = jsonInstance.getComments(subreddit,id,sortMode);<a name="line.124"></a>
-<FONT color="green">125</FONT>                    JsonParser parser = new JsonParser();<a name="line.125"></a>
-<FONT color="green">126</FONT>                    JsonArray allChildren = parser.parse(data).getAsJsonArray().get(1).getAsJsonObject().get("data").getAsJsonObject().get("children").getAsJsonArray();<a name="line.126"></a>
-<FONT color="green">127</FONT>                    ArrayList&lt;Comment&gt; result = new ArrayList&lt;Comment&gt;();<a name="line.127"></a>
-<FONT color="green">128</FONT>                    for (int i = 0; i &lt; allChildren.size()-1; i += 1) {<a name="line.128"></a>
-<FONT color="green">129</FONT>                            result.add(i, new Comment(allChildren.get(i).getAsJsonObject(), gson));<a name="line.129"></a>
-<FONT color="green">130</FONT>                    }<a name="line.130"></a>
-<FONT color="green">131</FONT>                    return result;<a name="line.131"></a>
-<FONT color="green">132</FONT>            }<a name="line.132"></a>
-<FONT color="green">133</FONT>            <a name="line.133"></a>
-<FONT color="green">134</FONT>            /**<a name="line.134"></a>
-<FONT color="green">135</FONT>             * Retrieves comments for a post<a name="line.135"></a>
-<FONT color="green">136</FONT>             * @param subreddit<a name="line.136"></a>
-<FONT color="green">137</FONT>             * @param id<a name="line.137"></a>
-<FONT color="green">138</FONT>             * @param sortMode<a name="line.138"></a>
-<FONT color="green">139</FONT>             * @param callback<a name="line.139"></a>
-<FONT color="green">140</FONT>             */<a name="line.140"></a>
-<FONT color="green">141</FONT>            public void getComments(String subreddit, String id, String sortMode, final GetCommentsListener callback) {<a name="line.141"></a>
-<FONT color="green">142</FONT>                    <a name="line.142"></a>
-<FONT color="green">143</FONT>                    jsonInstance.getComments(subreddit, id, sortMode, new JsonGetCommentsListener() {<a name="line.143"></a>
-<FONT color="green">144</FONT>                        @Override<a name="line.144"></a>
-<FONT color="green">145</FONT>                        public void getCommentsFailed(Exception exception) {<a name="line.145"></a>
-<FONT color="green">146</FONT>                            callback.getCommentsFailed(exception);<a name="line.146"></a>
-<FONT color="green">147</FONT>                        }<a name="line.147"></a>
-<FONT color="green">148</FONT>                        <a name="line.148"></a>
-<FONT color="green">149</FONT>                        @Override<a name="line.149"></a>
-<FONT color="green">150</FONT>                        public void getCommentsCompleted(String data) {<a name="line.150"></a>
-<FONT color="green">151</FONT>                            JsonParser parser = new JsonParser();<a name="line.151"></a>
-<FONT color="green">152</FONT>                            JsonArray allChildren = parser.parse(data).getAsJsonArray().get(0).getAsJsonObject().get("data").getAsJsonObject().get("children").getAsJsonArray();<a name="line.152"></a>
-<FONT color="green">153</FONT>                            ArrayList&lt;Comment&gt; result = new ArrayList&lt;Comment&gt;();<a name="line.153"></a>
-<FONT color="green">154</FONT>                            for (int i = 0; i &lt; allChildren.size()-1; i += 1) {<a name="line.154"></a>
-<FONT color="green">155</FONT>                                result.set(i, new Comment(allChildren.get(i).getAsJsonObject(), gson));<a name="line.155"></a>
-<FONT color="green">156</FONT>                            }<a name="line.156"></a>
-<FONT color="green">157</FONT>                            callback.getCommentsCompleted(result);<a name="line.157"></a>
-<FONT color="green">158</FONT>                        }<a name="line.158"></a>
-<FONT color="green">159</FONT>                    });<a name="line.159"></a>
-<FONT color="green">160</FONT>                    <a name="line.160"></a>
-<FONT color="green">161</FONT>            }<a name="line.161"></a>
-<FONT color="green">162</FONT>            <a name="line.162"></a>
-<FONT color="green">163</FONT>    }<a name="line.163"></a>
+<FONT color="green">118</FONT>             * @param id The unique id of a Post from which Comments will be returned.<a name="line.118"></a>
+<FONT color="green">119</FONT>             * @param sortMode The order that the Posts will be sorted by. Options are: "top" (ranked by upvotes minus downvotes), "best" (similar to top, except that it uses a more complicated algorithm to have good posts jump to the top and stay there, and bad comments to work their way down, see http://blog.reddit.com/2009/10/reddits-new-comment-sorting-system.html), "hot" (similar to "top", but weighted by time so that recent, popular posts are put near the top), "new" (posts will be sorted by creation time).<a name="line.119"></a>
+<FONT color="green">120</FONT>             * @return ArrayList&lt;Comment&gt;<a name="line.120"></a>
+<FONT color="green">121</FONT>             */<a name="line.121"></a>
+<FONT color="green">122</FONT>            public ArrayList&lt;Comment&gt; getComments(String subreddit, String id, String sortMode) throws Exception {<a name="line.122"></a>
+<FONT color="green">123</FONT>                    String data = jsonInstance.getComments(subreddit, id,sortMode);<a name="line.123"></a>
+<FONT color="green">124</FONT>                    JsonParser parser = new JsonParser();<a name="line.124"></a>
+<FONT color="green">125</FONT>                    JsonArray allChildren = parser.parse(data).getAsJsonArray().get(1).getAsJsonObject().get("data").getAsJsonObject().get("children").getAsJsonArray();<a name="line.125"></a>
+<FONT color="green">126</FONT>                    ArrayList&lt;Comment&gt; result = new ArrayList&lt;Comment&gt;();<a name="line.126"></a>
+<FONT color="green">127</FONT>                    for (int i = 0; i &lt; allChildren.size()-1; i += 1) {<a name="line.127"></a>
+<FONT color="green">128</FONT>                            result.add(new Comment(allChildren.get(i).getAsJsonObject(), gson));<a name="line.128"></a>
+<FONT color="green">129</FONT>                    }<a name="line.129"></a>
+<FONT color="green">130</FONT>                    return result;<a name="line.130"></a>
+<FONT color="green">131</FONT>            }<a name="line.131"></a>
+<FONT color="green">132</FONT>            <a name="line.132"></a>
+<FONT color="green">133</FONT>            /**<a name="line.133"></a>
+<FONT color="green">134</FONT>             * Retrieves comments for a post<a name="line.134"></a>
+<FONT color="green">135</FONT>             * @param id The unique id of a Post from which Comments will be returned.<a name="line.135"></a>
+<FONT color="green">136</FONT>             * @param sortMode The order that the Posts will be sorted by. Options are: "top" (ranked by upvotes minus downvotes), "best" (similar to top, except that it uses a more complicated algorithm to have good posts jump to the top and stay there, and bad comments to work their way down, see http://blog.reddit.com/2009/10/reddits-new-comment-sorting-system.html), "hot" (similar to "top", but weighted by time so that recent, popular posts are put near the top), "new" (posts will be sorted by creation time).<a name="line.136"></a>
+<FONT color="green">137</FONT>             * @param callback The listener that will receive the data (or error).<a name="line.137"></a>
+<FONT color="green">138</FONT>             */<a name="line.138"></a>
+<FONT color="green">139</FONT>            public void getComments(String subreddit, String id, String sortMode, final GetCommentsListener callback) {<a name="line.139"></a>
+<FONT color="green">140</FONT>                    <a name="line.140"></a>
+<FONT color="green">141</FONT>                    jsonInstance.getComments(subreddit, id, sortMode, new JsonGetCommentsListener() {<a name="line.141"></a>
+<FONT color="green">142</FONT>                        @Override<a name="line.142"></a>
+<FONT color="green">143</FONT>                        public void getCommentsFailed(Exception exception) {<a name="line.143"></a>
+<FONT color="green">144</FONT>                            callback.getCommentsFailed(exception);<a name="line.144"></a>
+<FONT color="green">145</FONT>                        }<a name="line.145"></a>
+<FONT color="green">146</FONT>                        <a name="line.146"></a>
+<FONT color="green">147</FONT>                        @Override<a name="line.147"></a>
+<FONT color="green">148</FONT>                        public void getCommentsCompleted(String data) {<a name="line.148"></a>
+<FONT color="green">149</FONT>                            JsonParser parser = new JsonParser();<a name="line.149"></a>
+<FONT color="green">150</FONT>                            JsonArray allChildren = parser.parse(data).getAsJsonArray().get(0).getAsJsonObject().get("data").getAsJsonObject().get("children").getAsJsonArray();<a name="line.150"></a>
+<FONT color="green">151</FONT>                            ArrayList&lt;Comment&gt; result = new ArrayList&lt;Comment&gt;();<a name="line.151"></a>
+<FONT color="green">152</FONT>                            for (int i = 0; i &lt; allChildren.size()-1; i += 1) {<a name="line.152"></a>
+<FONT color="green">153</FONT>                                result.add(new Comment(allChildren.get(i).getAsJsonObject(), gson));<a name="line.153"></a>
+<FONT color="green">154</FONT>                            }<a name="line.154"></a>
+<FONT color="green">155</FONT>                            callback.getCommentsCompleted(result);<a name="line.155"></a>
+<FONT color="green">156</FONT>                        }<a name="line.156"></a>
+<FONT color="green">157</FONT>                    });<a name="line.157"></a>
+<FONT color="green">158</FONT>                    <a name="line.158"></a>
+<FONT color="green">159</FONT>            }<a name="line.159"></a>
+<FONT color="green">160</FONT>            <a name="line.160"></a>
+<FONT color="green">161</FONT>    }<a name="line.161"></a>
 
 
 
