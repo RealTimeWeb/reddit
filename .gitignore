@@ -1,0 +1,10 @@
+# Python
+*.pyc
+*.pyo
+
+# Java
+**/bin/
+*.bak
+
+# Racket
+racket-*/compiled/
