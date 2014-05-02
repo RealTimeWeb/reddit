@@ -207,7 +207,6 @@ class Comment(object):
         :param int ups: The number of upvotes associated with this Comment.
         :param int created: The date that this Comment was created.
         :param str body: The text of this post, without any markup.
-        :param str body_html: The HTML text of this post.
         :param replies: A list of comments that are in reply to this one.
         :type replies: list of :ref:`Comment`
         :returns: Comment
@@ -348,14 +347,10 @@ def _get_posts_string(subreddit='all', sort_mode='hot'):
 
 def get_posts(subreddit='all', sort_mode='hot'):
     """
-    Retrieves all the top posts
+    Retrieves all the posts.
     
     :param str subreddit: The subreddit that Posts will be returned from (without the "r/" preceeding it). Use "all" to return results from all subreddits.
-    :param str sort_mode: The order that the Posts will be sorted by. Options are: "top" (ranked by upvotes minus downvotes), "best" (similar to top, except that it uses a more complicated algorithm to have good posts jump to the top and stay there, and bad comments to work their way down, see http://blog.reddit.com/2009/10/reddits-new-comment-sorting-system.html), "hot" (similar to "top", but weighted by time so that recent, popular posts are put near the top), "new" (posts will be sorted by creation time).
-    :type sort_mode: str
-    
-    :param subreddit: The subreddit that Posts will be returned from (without the "r/" preceeding it). Use "all" to return results from all subreddits.
-    :type subreddit: str
+    :param str sort_mode: The order that the Posts will be sorted by. Options are: "top" (ranked by upvotes minus downvotes), "best" (similar to top, except that it uses a more complicated algorithm to have good posts jump to the top and stay there, and bad comments to work their way down, see http://blog.reddit.com/2009/10/reddits-new-comment-sorting-system.html), "hot" (similar to "top", but weighted by time so that recent, popular posts are put near the top), "new" (posts will be sorted by creation time). Finally, there is "random", which returns a single post at random from within this subreddit.
     :returns: list of Post
     """
     if sort_mode not in SORT_MODES:
@@ -414,12 +409,13 @@ def _get_comments_string(post, sort_mode, max_depth, max_breadth):
 
 def get_comments(post, sort_mode='hot', max_depth=5, max_breadth=5):
     """
-    Retrieves comments for a post
-    
+    Retrieves comments for a post.
     
     :param post: The unique id of a Post from which Comments will be returned.
-    :type post: `str` or `Post`
+    :type post: `str` or :ref:`Post`
     :param str sort_mode: The order that the Posts will be sorted by. Options are: "top" (ranked by upvotes minus downvotes), "best" (similar to top, except that it uses a more complicated algorithm to have good posts jump to the top and stay there, and bad comments to work their way down, see http://blog.reddit.com/2009/10/reddits-new-comment-sorting-system.html), "hot" (similar to "top", but weighted by time so that recent, popular posts are put near the top), "new" (posts will be sorted by creation time).
+    :param int max_depth: The maximum depth that comments will be retrieved from (i.e., how many descendants from the topmost comment). To go down infinitely, use None.
+    :param int max_breadth: The maximum breadth that comments will be retrieved from (i.e., how many siblings from the topmost comment). Note that this breadth applies at every subtree - in effect, it is the branching factor. To get all siblings, use None.
     :returns: list of Comment
     """
     if sort_mode not in SORT_MODES:
