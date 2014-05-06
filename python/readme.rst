@@ -9,7 +9,7 @@ The simplest action is to get some posts by passing in a subreddit name.
 
 >>> posts = reddit.get_posts("virginiatech")
 >>> posts
-[<reddit.reddit.Post object>, <reddit.reddit.Post object>, ...]
+[<Post 24velv>, <Post 24wb98>, <Post 24u4cv>, ... ]
 >>> len(posts)
 25
 
@@ -19,6 +19,8 @@ Posts have a number of useful properties:
 'Pictures from the Formula SAE test drive today.'
 >>> post[0].ups - post[0].downs
 -5
+
+Other properties include: author, content, is_nsfw, is_url, subreddit and created.
 
 Given a Post, you can also get its comments:
 
@@ -68,20 +70,31 @@ The cache can be configured to handle repeated calls differently. For example, i
 >>> len(reddit.get_posts("corgis"))
 5
 
-To populate the cache:  
+To populate the cache:
 
 Say you want to add today's posts on the virginiatech subreddit to the cache.
 
-
 >>> reddit._start_editing()
 >>> reddit.get_posts('virginiatech')
-[<reddit.Post object at 0x7f50d2627990>, <reddit.Post object at 0x7f50d26279d0>, <reddit.Post object at 0x7f50d2627a10>, <reddit.Post object at 0x7f50d2627a50>, <reddit.Post object at 0x7f50d2627a90>, <reddit.Post object at 0x7f50d2627ad0>, <reddit.Post object at 0x7f50d2627b10>, <reddit.Post object at 0x7f50d2627b50>, <reddit.Post object at 0x7f50d2627b90>, <reddit.Post object at 0x7f50d2627bd0>, <reddit.Post object at 0x7f50d2627c10>, <reddit.Post object at 0x7f50d2627c50>, <reddit.Post object at 0x7f50d2627c90>, <reddit.Post object at 0x7f50d2627cd0>, <reddit.Post object at 0x7f50d2627d10>, <reddit.Post object at 0x7f50d2627d50>, <reddit.Post object at 0x7f50d2627d90>, <reddit.Post object at 0x7f50d2627dd0>, <reddit.Post object at 0x7f50d2627e10>, <reddit.Post object at 0x7f50d2627e50>, <reddit.Post object at 0x7f50d2627e90>, <reddit.Post object at 0x7f50d2627ed0>, <reddit.Post object at 0x7f50d2627f10>, <reddit.Post object at 0x7f50d2627f50>, <reddit.Post object at 0x7f50d2627f90>]
->>> reddit._save_cache("cache.json")
+>>> reddit._save_cache()
 >>>
 
-Now the "cache.json" file will have an entry for "virginiatech", and
+Now the file "cache.json" file will have an entry for "virginiatech", and
 you can use that as an input to the function when disconnected.
 
+
+You can also create a different cache file by passing a filename to the
+_save_cache() method, and use that cache by passing its name to the disconnect() method.
+
+For example, this will populate a file called "UCSB.json" with posts from the UCSantaBarbara subreddit.
+
+>>> reddit._start_editing()
+>>> reddit.get_posts("UCSantaBarbara")
+>>> reddit._save_cache("UCSB.json")
+
+To use that cached file, specify the json file name when you call disconnect():
+
+>>> reddit.disconnect("UCSB.json")
 
 To run the unit tests from the command line:
 
