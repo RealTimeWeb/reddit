@@ -125,7 +125,7 @@ def connect():
     """
     global _CONNECTED
     _CONNECTED = True
-def disconnect(filename="weatherservice/cache.json"):
+def disconnect(filename="cache.json"):
     """
     Connect to the local cache, so no internet connection is required.
     :returns: void
@@ -135,7 +135,7 @@ def disconnect(filename="weatherservice/cache.json"):
         with open(filename, 'r') as f:
             _CACHE = _recursively_convert_unicode_to_str(json.load(f))['data']
     except FileNotFoundError:
-        raise WeatherException("The cache file '{}' was not found.".format(filename))
+        raise RedditException("The cache file '{}' was not found.".format(filename))
     for key in _CACHE.keys():
         _CACHE_COUNTER[key] = 0
     _CONNECTED = False
@@ -176,7 +176,7 @@ def _add_to_cache(key, value):
         _CACHE[key] = [_PATTERN, value]
         _CACHE_COUNTER[key] = 0
         
-def _save_cache(filename="weatherservice/cache.json"):
+def _save_cache(filename="service/cache.json"):
     with open(filename, 'w') as f:
         json.dump({"data": _CACHE, "metadata": ""}, f)
         
