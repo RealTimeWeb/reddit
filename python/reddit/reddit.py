@@ -1,3 +1,8 @@
+"""
+RealTimeWeb library for accessing Reddit data.
+"""
+
+
 import sys
 PYTHON_3 = sys.version_info >= (3, 0)
 import urllib
@@ -10,6 +15,7 @@ else:
     import urllib2
     from urllib import quote_plus
     from urllib2 import HTTPError
+    FileNotFoundError = IOError
 try:
     import simplejson as json
 except ImportError:
@@ -135,10 +141,19 @@ def disconnect(filename="cache.json"):
         with open(filename, 'r') as f:
             _CACHE = _recursively_convert_unicode_to_str(json.load(f))['data']
     except FileNotFoundError:
-        raise RedditException("The cache file '{}' was not found.".format(filename))
+        raise RedditException("""The cache file '{0}' was not found, and I cannot disconnect without one. If you have not been given a cache.json file, then you can create a new one:
+    >>> from reddit import reddit
+    >>> reddit.connect()
+    >>> reddit._start_editing()
+    ...
+    >>> reddit.get_posts("askreddit")
+    ...
+    >>> reddit._save_cache('{0}')
+""".format(filename))
     for key in _CACHE.keys():
         _CACHE_COUNTER[key] = 0
     _CONNECTED = False
+    
 def _lookup(key):
     """
     Internal method that looks up a key in the local cache.

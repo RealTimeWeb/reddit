@@ -92,6 +92,10 @@ class TestredditOffline(unittest.TestCase):
     def test_askreddit(self):
         p1 = reddit.get_posts("askreddit")[0]
         self.assertIsInstance(p1, reddit.Post)
-   
+    def test_nocache(self):
+        with self.assertRaises(reddit.RedditException):
+            reddit.disconnect("non-existant-cache.json")
+        reddit.disconnect("cache2.json")
+        
 if __name__ == '__main__':
     unittest.main()
