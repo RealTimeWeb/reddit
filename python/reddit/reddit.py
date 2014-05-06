@@ -237,10 +237,16 @@ class Comment(object):
         return '<Comment {}>'.format(self.id)
     
     def __repr__(self):
-        return unicode(self).encode('utf-8')
+        if PYTHON_3:
+            return '<Comment {}>'.format(self.id)
+        else:
+            return unicode(self).encode('utf-8')
     
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        if PYTHON_3:
+            return '<Comment {}>'.format(self.id)
+        else:
+            return unicode(self).encode('utf-8')
         
     @staticmethod
     def _from_json(json_data, post_id='', max_depth=5, depth=0, max_breadth=None):
@@ -319,10 +325,16 @@ class Post(object):
         return '<Post {}>'.format(self.id)
     
     def __repr__(self):
-        return unicode(self).encode('utf-8')
+        if PYTHON_3:
+            return '<Post {}>'.format(self.id)
+        else:
+            return unicode(self).encode('utf-8')
     
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        if PYTHON_3:
+            return '<Post {}>'.format(self.id)
+        else:
+            return unicode(self).encode('utf-8')
     
     @staticmethod
     def _from_json(json_data):
@@ -351,7 +363,7 @@ class Post(object):
 
 SORT_MODES = ('hot', 'top', 'new', 'old', 'random', 'controversial')
 
-def _get_posts_request(subreddit='all',sort_mode='hot'):
+def _get_posts_request(subreddit='all',sort_mode='hot', allow_nsfw=False):
     """
     Used to build the request string used by :func:`get_posts`.
     
@@ -360,9 +372,9 @@ def _get_posts_request(subreddit='all',sort_mode='hot'):
     :param str sort_mode: The order that the Posts will be sorted by. Options are: "top" (ranked by upvotes minus downvotes), "best" (similar to top, except that it uses a more complicated algorithm to have good posts jump to the top and stay there, and bad comments to work their way down, see http://blog.reddit.com/2009/10/reddits-new-comment-sorting-system.html), "hot" (similar to "top", but weighted by time so that recent, popular posts are put near the top), "new" (posts will be sorted by creation time).
     :returns: str
     """
-    return "http://www.reddit.com/r/{}/{}.json".format(subreddit,sort_mode)
+    return "http://www.reddit.com/r/{}/{}.json?nsfw={}".format(subreddit,sort_mode, allow_nsfw)
 
-def _get_posts_string(subreddit='all', sort_mode='hot'):
+def _get_posts_string(subreddit='all', sort_mode='hot', allow_nsfw=False):
     """
     Like :func:`get_posts` except returns the raw data instead.
     
@@ -370,13 +382,13 @@ def _get_posts_string(subreddit='all', sort_mode='hot'):
     :param str sort_mode: The order that the Posts will be sorted by. Options are: "top" (ranked by upvotes minus downvotes), "best" (similar to top, except that it uses a more complicated algorithm to have good posts jump to the top and stay there, and bad comments to work their way down, see http://blog.reddit.com/2009/10/reddits-new-comment-sorting-system.html), "hot" (similar to "top", but weighted by time so that recent, popular posts are put near the top), "new" (posts will be sorted by creation time).
     :returns: str
     """
-    key = _get_posts_request(subreddit, sort_mode)
+    key = _get_posts_request(subreddit, sort_mode, allow_nsfw)
     result = _get(key) if _CONNECTED else _lookup(key)
     if _CONNECTED and _EDITABLE:
         _add_to_cache(key, result)
     return result
 
-def get_posts(subreddit='all', sort_mode='hot'):
+def get_posts(subreddit='all', sort_mode='hot', allow_nsfw=False):
     """
     Retrieves all the posts.
     
@@ -387,7 +399,7 @@ def get_posts(subreddit='all', sort_mode='hot'):
     if sort_mode not in SORT_MODES:
         raise RedditException("Unknown sort mode: {}".format(sort_mode))
     try:
-        result = _get_posts_string(subreddit, sort_mode)
+        result = _get_posts_string(subreddit, sort_mode, allow_nsfw)
     except HTTPError as e:
         if e.code == 404:
             raise RedditException("This subreddit does not exist yet.")
@@ -405,7 +417,10 @@ def get_posts(subreddit='all', sort_mode='hot'):
             raise RedditException("The response from the server didn't make any sense.")
         if "error" in json_result:
             raise RedditException("Error from Reddit: {}".format(json_result.get("error", "Unknown error.")))
-        return list(map(Post._from_json, json_result))
+        posts = list(map(Post._from_json, json_result))
+        if not allow_nsfw:
+            posts = [post for post in posts if not post.is_nsfw]
+        return posts
     else:
         if _CONNECTED:
             raise RedditException("No response from the server.")

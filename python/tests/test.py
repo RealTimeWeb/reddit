@@ -20,6 +20,14 @@ class TestRedditServiceOnline(unittest.TestCase):
         self.assertIsInstance(post.content, str)
         self.assertIsInstance(post.is_nsfw, bool)
         self.assertEqual(post.is_url, False)
+    def test_str(self):
+        post = reddit.get_posts("askreddit")[0]
+        print(post, "printed successfully!")
+    def test_nsfw(self):
+        posts = reddit.get_posts("nsfw", allow_nsfw=False)
+        self.assertFalse(posts)
+        posts = reddit.get_posts("nsfw", allow_nsfw=True)
+        self.assertTrue(posts)
     def test_corgis(self):
         posts = reddit.get_posts("corgis")
         self.assertTrue(posts)
