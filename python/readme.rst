@@ -68,6 +68,20 @@ The cache can be configured to handle repeated calls differently. For example, i
 >>> len(reddit.get_posts("corgis"))
 5
 
+To populate the cache:  
+
+Say you want to add today's posts on the virginiatech subreddit to the cache.
+
+
+>>> reddit._start_editing()
+>>> reddit.get_posts('virginiatech')
+[<reddit.Post object at 0x7f50d2627990>, <reddit.Post object at 0x7f50d26279d0>, <reddit.Post object at 0x7f50d2627a10>, <reddit.Post object at 0x7f50d2627a50>, <reddit.Post object at 0x7f50d2627a90>, <reddit.Post object at 0x7f50d2627ad0>, <reddit.Post object at 0x7f50d2627b10>, <reddit.Post object at 0x7f50d2627b50>, <reddit.Post object at 0x7f50d2627b90>, <reddit.Post object at 0x7f50d2627bd0>, <reddit.Post object at 0x7f50d2627c10>, <reddit.Post object at 0x7f50d2627c50>, <reddit.Post object at 0x7f50d2627c90>, <reddit.Post object at 0x7f50d2627cd0>, <reddit.Post object at 0x7f50d2627d10>, <reddit.Post object at 0x7f50d2627d50>, <reddit.Post object at 0x7f50d2627d90>, <reddit.Post object at 0x7f50d2627dd0>, <reddit.Post object at 0x7f50d2627e10>, <reddit.Post object at 0x7f50d2627e50>, <reddit.Post object at 0x7f50d2627e90>, <reddit.Post object at 0x7f50d2627ed0>, <reddit.Post object at 0x7f50d2627f10>, <reddit.Post object at 0x7f50d2627f50>, <reddit.Post object at 0x7f50d2627f90>]
+>>> reddit._save_cache("cache.json")
+>>>
+
+Now the "cache.json" file will have an entry for "virginiatech", and
+you can use that as an input to the function when disconnected.
+
 
 To run the unit tests from the command line:
 
