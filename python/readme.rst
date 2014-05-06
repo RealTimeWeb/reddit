@@ -68,6 +68,19 @@ The cache can be configured to handle repeated calls differently. For example, i
 >>> len(reddit.get_posts("corgis"))
 5
 
+To populate the cache:  
+
+Say you want to add today's posts on the virginiatech subreddit to the cache.
+
+
+>>> reddit._start_editing()
+>>> reddit.get_posts('virginiatech')
+>>> reddit._save_cache("cache.json")
+>>>
+
+Now the "cache.json" file will have an entry for "virginiatech", and
+you can use that as an input to the function.
+
 
 To run the unit tests from the command line:
 
