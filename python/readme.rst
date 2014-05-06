@@ -68,22 +68,34 @@ The cache can be configured to handle repeated calls differently. For example, i
 >>> len(reddit.get_posts("corgis"))
 5
 
-To populate the cache:  
+# To populate the cache:  
 
 Say you want to add today's posts on the virginiatech subreddit to the cache.
 
 
 >>> reddit._start_editing()
 >>> reddit.get_posts('virginiatech')
-[<reddit.Post object at 0x7f50d2627990>, <reddit.Post object at 0x7f50d26279d0>, <reddit.Post object at 0x7f50d2627a10>, <reddit.Post object at 0x7f50d2627a50>, <reddit.Post object at 0x7f50d2627a90>, <reddit.Post object at 0x7f50d2627ad0>, <reddit.Post object at 0x7f50d2627b10>, <reddit.Post object at 0x7f50d2627b50>, <reddit.Post object at 0x7f50d2627b90>, <reddit.Post object at 0x7f50d2627bd0>, <reddit.Post object at 0x7f50d2627c10>, <reddit.Post object at 0x7f50d2627c50>, <reddit.Post object at 0x7f50d2627c90>, <reddit.Post object at 0x7f50d2627cd0>, <reddit.Post object at 0x7f50d2627d10>, <reddit.Post object at 0x7f50d2627d50>, <reddit.Post object at 0x7f50d2627d90>, <reddit.Post object at 0x7f50d2627dd0>, <reddit.Post object at 0x7f50d2627e10>, <reddit.Post object at 0x7f50d2627e50>, <reddit.Post object at 0x7f50d2627e90>, <reddit.Post object at 0x7f50d2627ed0>, <reddit.Post object at 0x7f50d2627f10>, <reddit.Post object at 0x7f50d2627f50>, <reddit.Post object at 0x7f50d2627f90>]
->>> reddit._save_cache("cache.json")
+>>> reddit._save_cache()
 >>>
 
 Now the "cache.json" file will have an entry for "virginiatech", and
 you can use that as an input to the function when disconnected.
 
+You can also specify the name of a cache file in the _save_cache() and the disconnect() methods.  For example, this populates a 
+cache file called "udel.json" with posts from the udel subreddit:
 
-To run the unit tests from the command line:
+>>> reddit._start_editing()
+>>> posts = reddit.get_posts("udel")
+>>> reddit._save_cache("udel.json")
+
+And this accesses that cache for offline use:
+
+>>> reddit.disconnect("udel.json")
+>>> reddit.get_posts("udel")
+[<Post 1jgbl1>, <Post 24swcy>, <Post 24qk8j>, <Post 24n1w5>, <Post 24dhcz>, <Post 24azkf>, <Post 24b47e>, <Post 24820j>, <Post 248i88>, <Post 244nh4>, <Post 242w3k>, <Post 23zpf6>, <Post 23q2n8>, <Post 23q1f8>, <Post 23q2yp>, <Post 23of8k>, <Post 23ly53>, <Post 23fbxr>, <Post 23gl7u>, <Post 23bbah>, <Post 23aec5>, <Post 236pwf>, <Post 23135x>, <Post 2320mx>, <Post 22z7zb>]
+>>>
+
+# To run the unit tests from the command line:
 
 >>> python -m tests.test
 
