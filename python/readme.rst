@@ -9,7 +9,7 @@ The simplest action is to get some posts by passing in a subreddit name.
 
 >>> posts = reddit.get_posts("virginiatech")
 >>> posts
-[<reddit.reddit.Post object>, <reddit.reddit.Post object>, ...]
+[<Post 24velv>, <Post 24wb98>, <Post 24u4cv>, ... ]
 >>> len(posts)
 25
 
@@ -19,6 +19,8 @@ Posts have a number of useful properties:
 'Pictures from the Formula SAE test drive today.'
 >>> post[0].ups - post[0].downs
 -5
+
+Other proprties include: author, content, is_nsfw, is_url, subreddit and created.
 
 Given a Post, you can also get its comments:
 
