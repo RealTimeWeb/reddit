@@ -79,7 +79,7 @@ Say you want to add today's posts on the virginiatech subreddit to the cache.
 >>>
 
 Now the "cache.json" file will have an entry for "virginiatech", and
-you can use that as an input to the function.
+you can use that as an input to the function when disconnected.
 
 
 To run the unit tests from the command line:
