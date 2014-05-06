@@ -20,7 +20,7 @@ Posts have a number of useful properties:
 >>> post[0].ups - post[0].downs
 -5
 
-Other proprties include: author, content, is_nsfw, is_url, subreddit and created.
+Other properties include: author, content, is_nsfw, is_url, subreddit and created.
 
 Given a Post, you can also get its comments:
 
@@ -69,6 +69,9 @@ The cache can be configured to handle repeated calls differently. For example, i
 20
 >>> len(reddit.get_posts("corgis"))
 5
+
+
+
 
 To run the unit tests from the command line:
 
