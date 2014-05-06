@@ -70,8 +70,31 @@ The cache can be configured to handle repeated calls differently. For example, i
 >>> len(reddit.get_posts("corgis"))
 5
 
+To populate the cache:
+
+Say you want to add today's posts on the virginiatech subreddit to the cache.
+
+>>> reddit._start_editing()
+>>> reddit.get_posts('virginiatech')
+>>> reddit._save_cache()
+>>>
+
+Now the file "cache.json" file will have an entry for "virginiatech", and
+you can use that as an input to the function when disconnected.
 
 
+You can also create a different cache file by passing a filename to the
+_save_cache() method, and use that cache by passing its name to the disconnect() method.
+
+For example, this will populate a file called "UCSB.json" with posts from the UCSantaBarbara subreddit.
+
+>>> reddit._start_editing()
+>>> reddit.get_posts("UCSantaBarbara")
+>>> reddit._save_cache("UCSB.json")
+
+To use that cached file, specify the json file name when you call disconnect():
+
+>>> reddit.disconnect("UCSB.json")
 
 To run the unit tests from the command line:
 
