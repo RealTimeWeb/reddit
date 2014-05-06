@@ -176,7 +176,20 @@ def _add_to_cache(key, value):
         _CACHE[key] = [_PATTERN, value]
         _CACHE_COUNTER[key] = 0
         
+def _clear_key(key):
+    """
+    Internal method to remove a key from the local cache.
+    :param str key: The url to remove from the cache
+    """
+    if key in _CACHE:
+        del _CACHE[key]
+        
 def _save_cache(filename="cache.json"):
+    """
+    Internal method to save the cache in memory to a file, so that it can be used later.
+    
+    :param str filename: the location to store this at.
+    """
     with open(filename, 'w') as f:
         json.dump({"data": _CACHE, "metadata": ""}, f)
         
@@ -219,6 +232,15 @@ class Comment(object):
         self.created = created
         self.body = body
         self.replies = replies
+        
+    def __unicode__(self):
+        return '<Comment {}>'.format(self.id)
+    
+    def __repr__(self):
+        return unicode(self).encode('utf-8')
+    
+    def __str__(self):
+        return unicode(self).encode('utf-8')
         
     @staticmethod
     def _from_json(json_data, post_id='', max_depth=5, depth=0, max_breadth=None):
@@ -292,6 +314,15 @@ class Post(object):
         self.content = content
         self.is_nsfw = is_nsfw
         self.is_url = is_url
+        
+    def __unicode__(self):
+        return '<Post {}>'.format(self.id)
+    
+    def __repr__(self):
+        return unicode(self).encode('utf-8')
+    
+    def __str__(self):
+        return unicode(self).encode('utf-8')
     
     @staticmethod
     def _from_json(json_data):
