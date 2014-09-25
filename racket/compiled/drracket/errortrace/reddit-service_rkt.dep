@@ -1,1 +1,0 @@
-("5.3.4" ("fbcd53d1f0aae57d67facb383eb5d2620925b0a2" . "aed401a7077092d72104ad7fb386f4c4f6091154") (collects #"racket" #"main.rkt") (collects #"srfi" #"6.rkt") (collects #"net" #"url.rkt") (collects #"json" #"main.rkt") (collects #"net" #"uri-codec.rkt") (collects #"racket" #"port.rkt") (collects #"srfi" #"19.rkt") (collects #"racket" #"lang" #"reader.rkt"))

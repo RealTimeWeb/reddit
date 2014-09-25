@@ -1,0 +1,218 @@
+{
+    "metadata": {
+        "name": "RedditService",
+        "description": "An example service that shows generally how the spec file is structured.",
+        "version": 1.5,
+        "author": "Peeratham Techapalokul",
+        "contact": "tpeera4@vt.edu"
+    },
+    "objects": {
+        "Listing": {
+            "format": "json",
+            "fields": {
+                "postlisting": {
+                    "type": "PostListing",
+                    "path": "[0]",
+                    "format": "json"
+                },
+                "commentlisting": {
+                    "type": "CommentListing",
+                    "path": "[1]",
+                    "format": "json"
+                }
+            }
+        },
+        "Comment": {
+            "format": "json",
+            "fields": {
+                "replies": {
+                    "format": "json",
+                    "type": "CommentListing",
+                    "path": "data.replies"
+                },
+                "subreddit": {
+                    "type": "string",
+                    "path": "data.subreddit",
+                    "description": "name for sub reddit"
+                },
+                "content": {
+                    "type": "string",
+                    "path": "data.body",
+                    "description": ""
+                },
+                "id": {
+                    "type": "string",
+                    "path": "data.id",
+                    "description": "id of the post"
+                },
+                "link_id": {
+                    "comment": "prepend reddit.com to this",
+                    "type": "string",
+                    "path": "data.link_id",
+                    "description": ""
+                },
+                "author": {
+                    "type": "string",
+                    "path": "data.author",
+                    "description": ""
+                },
+                "ups": {
+                    "type": "integer",
+                    "path": "data.ups",
+                    "description": ""
+                },
+                "downs": {
+                    "type": "integer",
+                    "path": "data.downs",
+                    "description": ""
+                },
+                "created": {
+                    "type": "integer",
+                    "path": "data.created",
+                    "description": ""
+                }
+            }
+        },
+        "Post": {
+            "format": "json",
+            "fields": {
+                "subreddit": {
+                    "type": "string",
+                    "path": "data.subreddit",
+                    "description": "name for sub reddit"
+                },
+                "content": {
+                    "type": "string",
+                    "path": "data.selftext",
+                    "description": ""
+                },
+                "id": {
+                    "type": "string",
+                    "path": "data.id",
+                    "description": "id of the post"
+                },
+                "is_self": {
+                    "type": "boolean",
+                    "path": "data.is_self",
+                    "description": ""
+                },
+                "is_nsfw": {
+                    "type": "boolean",
+                    "path": "data.over_18",
+                    "description": ""
+                },
+                "permalink": {
+                    "comment": "prepend reddit.com to this",
+                    "type": "string",
+                    "path": "data.permalink",
+                    "description": ""
+                },
+                "author": {
+                    "type": "string",
+                    "path": "data.author",
+                    "description": ""
+                },
+                "title": {
+                    "type": "string",
+                    "path": "data.title",
+                    "description": ""
+                },
+                "ups": {
+                    "type": "integer",
+                    "path": "data.ups",
+                    "description": ""
+                },
+                "downs": {
+                    "type": "integer",
+                    "path": "data.downs",
+                    "description": ""
+                },
+                "created": {
+                    "type": "integer",
+                    "path": "data.created",
+                    "description": ""
+                }
+            }
+        },
+        "CommentListing": {
+            "comment": "They can have an optional comment.",
+            "format": "json",
+            "fields": {
+                "comments": {
+                    "type": "Comment[]",
+                    "path": "data.children",
+                    "description": "This will be in the fields docstring.",
+                    "comment": "A comment is stored in the generated source code, but not in the docstrings.",
+                    "order": 0
+                }
+            }
+        },
+        "PostListing": {
+            "comment": "They can have an optional comment.",
+            "format": "json",
+            "fields": {
+                "posts": {
+                    "type": "Post[]",
+                    "format": "json",
+                    "path": "data.children"
+                }
+            }
+        }
+    },
+    "functions": {
+        "getPostListing": {
+            "url": "http://www.reddit.com/r/<subreddit>/<sort_mode>.json",
+            "format": "json",
+            "verb": "get",
+            "description": "Retrieves all the top posts",
+            "comment": "Need to filter by data->children",
+            "output": "PostListing",
+            "inputs": {
+                "subreddit": {
+                    "type": "string",
+                    "order": 1,
+                    "path": "subreddit",
+                    "indexable": true,
+                    "description": "The subreddit that Posts will be returned from (without the \"r/\" preceeding it). Use \"all\" to return results from all subreddits."
+                },
+                "sortmode": {
+                    "path": "sort_mode",
+                    "order": 2,
+                    "type": "string",
+                    "indexable": true,
+                    "description": " "
+                }
+            }
+        },
+        "getCommentListing": {
+            "url": "http://www.reddit.com/r/<subreddit>/comments/<id>/<sort_mode>.json",
+            "verb": "get",
+            "description": "get listing",
+            "output": "Listing",
+            "format": "json",
+            "inputs": {
+                "subreddit": {
+                    "path": "subreddit",
+                    "type": "string",
+                    "hidden": false,
+                    "indexable": true,
+                    "order": 0
+                },
+                "id": {
+                    "path": "id",
+                    "type": "string",
+                    "hidden": false,
+                    "indexable": true,
+                    "order": 1
+                },
+                "sortmode": {
+                    "path": "sort_mode",
+                    "type": "string",
+                    "hidden": false,
+                    "indexable": true,
+                    "order": 2
+                }
+            }
+        }
+    }
+}
