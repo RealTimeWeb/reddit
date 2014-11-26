@@ -1,0 +1,4 @@
+#lang racket
+(require "reddit-service.rkt")
+
+(get-posts "all" "top")
