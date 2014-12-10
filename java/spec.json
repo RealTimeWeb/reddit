@@ -1,0 +1,187 @@
+{
+    "metadata": {
+        "name": "Reddit Service",
+        "description": "Get the Front Page of the internet.",
+        "author": "Peeratham Techapalokul",
+        "contact": "tpeera4@vt.edu",
+        "version": 2.1
+    },
+    "objects": {
+        "Post": {
+            "format": "json",
+            "description": "A link (or self-text) that has been submitted to Reddit.",
+            "fields": {
+                "ups": {
+                    "type": "integer",
+                    "path": "data.ups",
+                    "description": "The number of upvotes associated with this Post."
+                },
+                "downs": {
+                    "type": "integer",
+                    "path": "data.downs",
+                    "description": "The number of downvotes associated with this Post."
+                },
+                "created": {
+                    "type": "long",
+                    "path": "data.created",
+                    "comment": "epoch time, save as long, convert to date",
+                    "description": "The date that this Post was created."
+                },
+                "subreddit": {
+                    "type": "string",
+                    "path": "data.subreddit",
+                    "description": "The subreddit that this Post was made in."
+                },
+                "id": {
+                    "type": "string",
+                    "path": "data.id",
+                    "description": "A unique ID for this Post. A combination of letters, numbers, and dashes."
+                },
+                "title": {
+                    "type": "string",
+                    "path": "data.title",
+                    "description": "The title of this Post."
+                },
+                "author": {
+                    "type": "string",
+                    "path": "data.author",
+                    "description": "The username of the author of this Post."
+                },
+                "is self": {
+                    "type": "boolean",
+                    "path": "data.is_self",
+                    "description": "Whether or not this Post was text (True), or a URL (False)."
+                },
+                "is nsfw": {
+                    "type": "boolean",
+                    "path": "data.over_18",
+                    "description": "Whether or not this Post is Not Safe for Work (NSFW)."
+                },
+                "content": {
+                    "type": "string",
+                    "path": "data.selftext",
+                    "comment": "if is self then use data->url",
+                    "description": "The text of the post, or a url if it is not a self Post."
+                },
+                "permalink": {
+                    "type": "string",
+                    "path": "data.permalink",
+                    "comment": "prepend reddit.com to this",
+                    "description": "A permanent url that directs to this Post."
+                }
+            }
+        },
+        "Comment": {
+            "format": "json",
+            "description": "A Comment on either a Post or another Comment.",
+            "fields": {
+                "ups": {
+                    "type": "integer",
+                    "path": "data.ups",
+                    "description": "The number of upvotes associated with this Comment."
+                },
+                "downs": {
+                    "type": "integer",
+                    "path": "data.downs",
+                    "description": "The number of downvotes associated with this Comment."
+                },
+                "created": {
+                    "type": "long",
+                    "path": "data.created",
+                    "comment": "epoch time, save as long, convert to date",
+                    "description": "The date that this Comment was created."
+                },
+                "subreddit": {
+                    "type": "string",
+                    "path": "data.subreddit",
+                    "description": "The subreddit that this Comment was made in."
+                },
+                "id": {
+                    "type": "string",
+                    "path": "data.id",
+                    "description": "A unique ID for this Comment. A combination of letters, numbers, and dashes."
+                },
+                "author": {
+                    "type": "string",
+                    "path": "data.author",
+                    "description": "The username of the author of this Post."
+                },
+                "body": {
+                    "type": "string",
+                    "path": "data.body",
+                    "description": "The text of this post, without any markup."
+                },
+                "body html": {
+                    "type": "string",
+                    "path": "data.body_html",
+                    "description": "The HTML text of this post."
+                },
+                "replies": {
+                    "type": "Comment[]",
+                    "path": "data.replies.data.children",
+                    "comment": "filter by replies.data.children",
+                    "description": "A list of comments that are in reply to this one."
+                }
+            }
+        }
+    },
+    "functions": {
+        "get posts": {
+            "url": "http://www.reddit.com/r/<subreddit>/<sort_mode>.json",
+            "format": "json",
+            "verb": "get",
+            "description": "Retrieves all the top posts",
+            "comment": "Need to filter by data->children",
+            "output": "Post[]",
+            "post": "data.children",
+            "inputs": {
+                "subreddit": {
+                    "type": "string",
+                    "path": "subreddit",
+                    "indexable": true,
+                    "order": 0,
+                    "description": "The subreddit that Posts will be returned from (without the \"r/\" preceeding it). Use \"all\" to return results from all subreddits."
+                },
+                "sort_mode": {
+                    "path": "sort_mode",
+                    "type": "string",
+                    "indexable": true,
+                    "order": 1,
+                    "description": "The order that the Posts will be sorted by. Options are: \"top\" (ranked by upvotes minus downvotes), \"best\" (similar to top, except that it uses a more complicated algorithm to have good posts jump to the top and stay there, and bad comments to work their way down, see http://blog.reddit.com/2009/10/reddits-new-comment-sorting-system.html), \"hot\" (similar to \"top\", but weighted by time so that recent, popular posts are put near the top), \"new\" (posts will be sorted by creation time)."
+                }
+            }
+        },
+        "get comments": {
+            "url": "http://www.reddit.com/r/<subreddit>/comments/<id>/<sort_mode>.json",
+            "format": "json",
+            "verb": "get",
+            "description": "Retrieves comments for a post",
+            "comment": "Need to filter by data->children. Also, skip the first element, and the last element.",
+            "post": "[1].data.children",
+            "output": "Comment[]",
+            "inputs": {
+                "subreddit": {
+                    "path": "subreddit",
+                    "type": "string",
+                    "indexable": true,
+                    "order": 0,
+                    "description": "The subreddit that the comments belong to."
+                },
+                "id": {
+                    "order": 1,
+                    "type": "string",
+                    "path": "id",
+                    "indexable": true,
+                    "description": "The unique id of a Post from which Comments will be returned."
+                },
+                "sort_mode": {
+                    "path": "sort_mode",
+                    "order": 2,
+                    "type": "string",
+                    "indexable": true,
+                    "description": "The order that the Posts will be sorted by. Options are: \"top\" (ranked by upvotes minus downvotes), \"best\" (similar to top, except that it uses a more complicated algorithm to have good posts jump to the top and stay there, and bad comments to work their way down, see http://blog.reddit.com/2009/10/reddits-new-comment-sorting-system.html), \"hot\" (similar to \"top\", but weighted by time so that recent, popular posts are put near the top), \"new\" (posts will be sorted by creation time)."
+                }
+            }
+        }
+    }
+}
